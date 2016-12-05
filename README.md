@@ -18,17 +18,17 @@
         
         # source build/envsetup.sh
         
-        # lunch cm_rainbow-eng
+        # lunch cm_yaris_m_gsm-eng
 
 * recoveries
 
-        # . build/tools/device/makerecoveries.sh cm_rainbow-eng
+        # . build/tools/device/makerecoveries.sh cm_yaris_m_gsm-eng
     
         # mka bootimage
 
 * full build
 
-        # brunch cm_rainbow-eng
+        # brunch cm_yaris_m_gsm-eng
 
 # MTK
 
