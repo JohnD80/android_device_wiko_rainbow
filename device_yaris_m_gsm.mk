@@ -5,7 +5,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 $(call inherit-product-if-exists, vendor/tct/yaris_m_gsm/yaris_m_gsm-vendor.mk)
 
-PRODUCT_CHARACTERISTICS := nosdcard
+#PRODUCT_CHARACTERISTICS := nosdcard
 
 DEVICE_PACKAGE_OVERLAYS += device/tct/yaris_m_gsm/overlay
 
@@ -52,6 +52,8 @@ PRODUCT_COPY_FILES += \
     device/tct/yaris_m_gsm/rootdir/root/init.xlog.rc:root/init.xlog.rc \
     device/tct/yaris_m_gsm/rootdir/root/ueventd.mt6572.rc:root/ueventd.mt6572.rc \
     device/tct/yaris_m_gsm/rootdir/root/init.mt6572.usb.rc:root/init.mt6572.usb.rc \
+    device/tct/yaris_m_gsm/rootdir/root/init.protect.rc:root/init.protect.rc \
+    device/tct/yaris_m_gsm/rootdir/root/ueventd.rc:root/ueventd.rc \
     $(LOCAL_KERNEL):kernel
 
 PRODUCT_COPY_FILES += \
@@ -83,6 +85,7 @@ PRODUCT_PROPERTY_OVERRIDES := \
 	ro.allow.mock.location=0 \
 	ro.debuggable=1 \
 	persist.sys.usb.config=mtp,adb \
+	ro.mount.fs=EXT4 \
 	persist.service.adb.enable=1 \
 	persist.service.debuggable=1 \
 	persist.mtk.wcn.combo.chipid=-1

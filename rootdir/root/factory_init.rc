@@ -4,14 +4,12 @@ on early-init
 
     start ueventd
 
+	write /proc/bootprof "INIT: usr/eng build setting"
 # create mountpoints
     mkdir /mnt 0775 root system
-    #mkdir /mnt/sdcard 0000 system system
-    #mkdir /mnt/sdcard2 0000 system system
     mkdir /storage 0055 system sdcard_r
     mkdir /storage/sdcard0 0000 system system
     mkdir /storage/sdcard1 0000 system system
-    #mkdir /mnt/cd-rom 0000 system system
     # for backwards compatibility
     symlink /storage/sdcard0 /sdcard
     symlink /storage/sdcard0 /mnt/sdcard
@@ -75,6 +73,7 @@ on fs_property:ro.mount.fs=YAFFS
     # Mount /system rw first to give the filesystem a chance to save a checkpoint
     write /proc/bootprof "INIT:NAND:Mount_START 6589"
     mount yaffs2 mtd@system /system
+    chmod 0750 /system/etc/partition_permission.sh
     mount yaffs2 mtd@system /system ro remount
     mount yaffs2 mtd@userdata /data nosuid nodev
     mount yaffs2 mtd@cache /cache nosuid nodev
@@ -87,6 +86,7 @@ on fs_property:ro.mount.fs=EXT4
     #mount ext4 emmc@android /system wait commit=1,data=journal,noauto_da_alloc
     mount ext4 emmc@android /system wait commit=1,noauto_da_alloc
     mount ext4 emmc@android /system noatime ro remount wait
+    chmod 0750 /system/etc/partition_permission.sh
     exec /sbin/e2fsck -pfD /emmc@usrdata
     exec /sbin/tune2fs -O has_journal /emmc@usrdata
     exec /system/bin/ext4_resize
@@ -99,9 +99,11 @@ on fs_property:ro.mount.fs=EXT4
 on fs_property:ro.mount.fs=UBIFS
     write /proc/bootprof "INIT:NAND:Mount_START"
     mount ubifs ubi@system /system
+    chmod 0750 /system/etc/partition_permission.sh
     mount ubifs ubi@system /system ro remount sync
-    mount ubifs ubi@userdata /data nosuid nodev sync
-    mount ubifs ubi@cache /cache nosuid nodev sync 
+    mount ubifs ubi@userdata /data nosuid nodev sync wait
+#    mount ubifs ubi@cache /cache nosuid nodev sync
+    mount yaffs2 mtd@cache /cache nosuid nodev 
     write /proc/bootprof "INIT:NAND:Mount_END"
 # mount different fs end
 on post-fs
@@ -139,7 +141,7 @@ on post-fs
     chmod 0220 /proc/sysrq-trigger
 
 # create basic filesystem structure
-    mkdir /data/nvram 2770 root nvram
+    mkdir /data/nvram 0770 root nvram
     mkdir /data/misc 01771 system misc
     mkdir /data/misc/bluetoothd 0770 bluetooth bluetooth
     mkdir /data/misc/bluetooth 0770 system system
@@ -176,6 +178,9 @@ on post-fs
     #mknod /dev/devmap c 196 0;
     chmod 0440 /dev/devmap
     chown root system /dev/devmap
+
+	#change partition permission
+    exec /system/etc/partition_permission.sh
 
 ## Custom pos-fs area (START)
 # Please add custom fs operation below
@@ -294,7 +299,7 @@ on post-fs
 #    insmod /system/lib/modules/ccci_plat.ko
 #    insmod /system/lib/modules/ccci.ko
 #  Build-in Modified - E
-    # chown ccci ccci /sys/class/BOOT/BOOT/boot/md
+#   chown ccci ccci /sys/class/BOOT/BOOT/boot/md
     chown ccci ccci /sys/kernel/ccci/boot
     # M4U
     #insmod /system/lib/modules/m4u.ko
@@ -305,14 +310,22 @@ on post-fs
     chmod 0666 /dev/hwmsensor
     chmod 0666 /dev/msensor
     chmod 0666 /dev/gsensor
-    chmod 0666 /dev/als_ps
+    chmod 0666 /dev/alsps
     chmod 0666 /dev/gyroscope
 
     #VideoCodec
     #insmod /system/lib/modules/vcodec_kernel_driver.ko
-    mknod /dev/Vcodec c 160 0
+    mknod /dev/Vcodec c 189 0
     chmod 0666 /dev/Vcodec
     chown system media /dev/Vcodec
+    
+    #Display
+    chmod 0440 /dev/mtk_disp
+    chown system system /dev/mtk_disp
+
+    #Camera
+    chmod 0660 /dev/camera-isp
+    chown system camera /dev/camera-isp    
 
     mkdir /data/amit/
 
@@ -395,9 +408,8 @@ service nvram_daemon /system/bin/nvram_daemon
 
 # DFO (Begin)
 service featured /system/bin/featured
-    user nvram
-    group nvram system
-    socket dfo stream 660 nvram system
+    user root
+    socket dfo stream 660 root system
 # DFO (End)
 
 service mdlogger /system/bin/mdlogger
@@ -465,6 +477,12 @@ on property:sys.mtk.no.factoryimage=1
 on property:sys.mtk.no.factoryimage=0
     start factory_with_image
 
+#add by wangsheng for fastmmi 20140725
+service fastmmi /system/bin/fctd
+	socket fctd stream 666 root root
+service mtk_fctd /system/bin/mtk_fctd.sh
+	oneshot
+#end by wangsheng for fastmmi 20140725
 #mass_storage,adb,acm
 on property:sys.usb.com_config=0
     write /sys/class/android_usb/android0/iSerial $ro.serialno
