@@ -52,8 +52,6 @@ TARGET_GLOBAL_CPPFLAGS += -mfpu=neon -mfloat-abi=softfp
 TARGET_KMODULES := true
 
 TARGET_PREBUILT_KERNEL := device/tct/yaris_m_gsm/kernel
-TARGET_RECOVERY_FSTAB := device/tct/yaris_m_gsm/recovery/recovery.fstab
-
 
 # Assert
 TARGET_OTA_ASSERT_DEVICE := yaris_m_gsm,Yaris_M_GSM,4032A,Yaris_M,4033
@@ -64,13 +62,14 @@ RECOVERY_VARIANT := twrp
 #RECOVERY_VARIANT := carliv
 
 ifneq ($(RECOVERY_VARIANT),carliv)
-TARGET_RECOVERY_FSTAB := device/TCT/Yaris_M_GSM/recovery/twrp.fstab
+TARGET_RECOVERY_FSTAB := device/tct/yaris_m_gsm/recovery/recovery.fstab
 endif
 
 
 # CARLIV
 ifeq ($(RECOVERY_VARIANT),carliv)
 BOARD_HAS_MTK := true
+BOARD_USE_CUSTOM_RECOVERY_FONT := \"font_10x18.h\"
 BOARD_NEEDS_MTK_GETSIZE := true
 DEVICE_RESOLUTION := 480x800
 endif
@@ -86,19 +85,20 @@ BRIGHTNESS_SYS_FILE := "/sys/class/leds/lcd-backlight/brightness"
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/mt_usb/musb-hdrc.0/gadget/lun%d/file"
 TARGET_SCREEN_HEIGHT := 800
 TARGET_SCREEN_WIDTH := 480
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
+TARGET_RECOVERY_PIXEL_FORMAT := "BRGA_8888"
 endif
 
 # TWRP
 ifeq ($(RECOVERY_VARIANT),twrp)
+TARGET_RECOVERY_FSTAB := device/tct/yaris_m_gsm/recovery/twrp.fstab
 TW_NO_EXFAT := true
-TWHAVE_SELINUX := false
+TWHAVE_SELINUX := true
 TW_THEME := portrait_mdpi
 TW_NO_EXFAT_FUSE := true
 TW_USE_MODEL_HARDWARE_ID_FOR_DEVICE_ID := true
 TARGET_USE_CUSTOM_LUN_FILE_PATH := "/sys/devices/platform/mt_usb/musb-hdrc.0/gadget/lun%d/file"
 TW_EXCLUDE_SUPERSU := true
-TARGET_RECOVERY_PIXEL_FORMAT := "RGB_565"
+TARGET_RECOVERY_PIXEL_FORMAT := "BRGA_8888"
 DEVICE_RESOLUTION := 480x800
 TW_BRIGHTNESS_PATH := /sys/class/leds/lcd-backlight/brightness
 TW_MAX_BRIGHTNESS := 255
