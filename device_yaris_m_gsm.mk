@@ -5,7 +5,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 
 $(call inherit-product-if-exists, vendor/tct/yaris_m_gsm/yaris_m_gsm-vendor.mk)
 
-#PRODUCT_CHARACTERISTICS := nosdcard
+PRODUCT_CHARACTERISTICS := nosdcard
 
 DEVICE_PACKAGE_OVERLAYS += device/tct/yaris_m_gsm/overlay
 
@@ -54,6 +54,7 @@ PRODUCT_COPY_FILES += \
     device/tct/yaris_m_gsm/rootdir/root/init.mt6572.usb.rc:root/init.mt6572.usb.rc \
     device/tct/yaris_m_gsm/rootdir/root/init.protect.rc:root/init.protect.rc \
     device/tct/yaris_m_gsm/rootdir/root/ueventd.rc:root/ueventd.rc \
+    device/alcatel/yaris/rootdir/root/init.mt6572.usb.rc:root/init.mt6572.usb.rc \
     $(LOCAL_KERNEL):kernel
 
 PRODUCT_COPY_FILES += \
@@ -85,7 +86,6 @@ PRODUCT_PROPERTY_OVERRIDES := \
 	ro.allow.mock.location=0 \
 	ro.debuggable=1 \
 	persist.sys.usb.config=mtp,adb \
-	ro.mount.fs=EXT4 \
 	persist.service.adb.enable=1 \
 	persist.service.debuggable=1 \
 	persist.mtk.wcn.combo.chipid=-1
@@ -94,3 +94,16 @@ PRODUCT_NAME := full_yaris_m_gsm
 PRODUCT_DEVICE := yaris_m_gsm
 
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
+
+ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=0 \
+ro.allow.mock.location=0 \
+persist.mtk.aee.aed=on \
+ro.debuggable=1 \
+ro.adb.secure=0 \
+ro.telephony.ril_class=MediaTekRIL \
+persist.service.acm.enable=0 \
+persist.sys.usb.config=mtp,mass_storage \
+persist.sys.force_highendgfx=true \
+ro.mount.fs=EXT4 \
+ro.persist.partition.support=no
+
