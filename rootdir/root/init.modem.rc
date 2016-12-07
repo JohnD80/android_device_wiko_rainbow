@@ -9,15 +9,14 @@ on post-fs-data
     write /proc/bootprof "post-fs-data: on modem start"
 
     # Modem related device nodes
-    mkdir /data/nvram/md  0770 root nvram
+    mkdir /data/nvram/md  2770 root nvram
 
 #  Build-in Modified - S
-#   insmod /system/lib/modules/ccci_plat.ko
-#   insmod /system/lib/modules/ccci.ko
+#    insmod /system/lib/modules/ccci_plat.ko
+#    insmod /system/lib/modules/ccci.ko
 #  Build-in Modified - E
-#   chown ccci ccci /sys/class/BOOT/BOOT/boot/md
     chown ccci ccci /sys/kernel/ccci/boot
-
+    
     # Encrypt phone function
     setprop vold.post_fs_data_done 1
     
@@ -26,12 +25,14 @@ service gsm0710muxd /system/bin/gsm0710muxd -s /dev/ttyC0 -f 512 -n 8 -m basic
     user root
     group radio cache inet misc ccci
     disabled
+    oneshot
 
 service gsm0710muxdmd2 /system/bin/gsm0710muxdmd2 -s /dev/ccci2_tty0 -f 512 -n 8 -m basic
     class core
     user root
     group radio cache inet misc ccci
     disabled
+    oneshot
 
 service muxreport-daemon /system/bin/muxreport
     class core
@@ -55,9 +56,12 @@ service ril-daemon /system/bin/rild
     user root
     group radio cache inet misc audio sdcard_r sdcard_rw log ccci system
     disabled
+    oneshot
 
 service ril-daemon-md2 /system/bin/rildmd2
     class core
+    socket rild1 stream 660 root radio
+    socket rild-debug1 stream 660 radio system
     socket rild-md2 stream 660 root radio
     socket rild2-md2 stream 660 root radio
     socket rild-debug-md2 stream 660 radio system
@@ -69,6 +73,7 @@ service ril-daemon-md2 /system/bin/rildmd2
     user root
     group radio cache inet misc audio sdcard_r sdcard_rw log ccci system
     disabled
+    oneshot
 
 service md_minilog_util /system/bin/md_minilog_util
     user radio
@@ -86,15 +91,16 @@ service md_minilog_util /system/bin/md_minilog_util
 #    oneshot
 
 service ccci_fsd /system/bin/ccci_fsd 0
-    user ccci
+    user root
     group  nvram ccci system
     class core
     oneshot
 
 service ccci_mdinit /system/bin/ccci_mdinit 0
-    user system
-    group ccci system
+    user root
+    group  nvram ccci system
     class core
+    oneshot
 
 
 service pppd_gprs /system/bin/pppd_dt /dev/ttyACM0 debug noauth refuse-eap usepeerdns nodetach
