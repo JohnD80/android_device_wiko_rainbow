@@ -1,45 +1,21 @@
+----Thanks for ferhung, fire855 & superdragonpt, who are contributing to the working CyanogenMod of MTK hardware(MT6592&MT6582).---
+
+---- Also thanks to all developers that help me building this sources for Atenea/D5/whatever. Blerfont, Jose, Visionary, etc... ---
+
+This is a device tree for Elephone Q, which is based on MT6572 SoC.
 # Build
 
-* features
-
-  * wifi
-  * gsm (call in / call out / hangout)
-  * egl
-  * sound
-  * camera
-  * BT
-  * sensors
-
 * init
+  Sync CyanogenMod source modified by ferhung:
 
-        # repo init -u git://github.com/CyanogenMod/android.git -b cm-11.0
-        
+        # repo init -u git://github.com/ferhung/android.git -b cm-12.1
+
         # repo sync
-        
-        # source build/envsetup.sh
-        
-        # lunch cm_yaris_m_gsm-eng
 
-* recoveries
-
-        # . build/tools/device/makerecoveries.sh cm_yaris_m_gsm-eng
-    
-        # mka bootimage
+	# git clone this repo to device/elephone/Q and the vendor repo to the needed place.
 
 * full build
+        
+        # source build/envsetup.sh
 
-        # brunch cm_yaris_m_gsm-eng
-
-# MTK
-
-Few words about mtk related binaries, services and migration peculiarities.
-
-# Limitations
-
-Services requires root:
-
-`system/core/rootdir/init.rc`
-
-  * surfaceflinger depends on sched_setscheduler calls, unable to change process priority from 'system' user (default user 'system')
-
-  * mediaserver depends on /data/nvram folder access, unable to do voice calls from 'media' user (default user 'media')
+        # lunch cm_Q and mka bacon
