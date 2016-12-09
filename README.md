@@ -2,7 +2,7 @@
 
 ---- Also thanks to all developers that help me building this sources for Atenea/D5/whatever. Blerfont, Jose, Visionary, etc... ---
 
-This is a device tree for Elephone Q, which is based on MT6572 SoC.
+This is a device tree for Alcatel Pop C2 codename yaris_m_gsm, which is based on MT6572 SoC.
 # Build
 
 * init
@@ -12,10 +12,10 @@ This is a device tree for Elephone Q, which is based on MT6572 SoC.
 
         # repo sync
 
-	# git clone this repo to device/elephone/Q and the vendor repo to the needed place.
+	# git clone this repo to device/tct/yaris_m_gsm and the vendor repo to the needed place.
 
 * full build
         
         # source build/envsetup.sh
 
-        # lunch cm_Q and mka bacon
+        # lunch cm_yaris_m_gsm && mka bacon

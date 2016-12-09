@@ -1,5 +1,5 @@
 #
-# system.prop for atenea
+# system.prop for yaris_m_gsm
 #
 service.adb.root=1
 ro.sf.lcd_density=210
