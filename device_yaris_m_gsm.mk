@@ -36,27 +36,31 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     lib_driver_cmd_mt66xx
-
+    
+# Keylayout
 PRODUCT_COPY_FILES += \
     device/tct/yaris_m_gsm/rootdir/configs/mtk-kpd.kl:system/usr/keylayout/mtk-kpd.kl
 
+# Rootdir
 PRODUCT_COPY_FILES += \
-    device/tct/yaris_m_gsm/rootdir/root/fstab.mt6572:root/fstab.mt6572 \
-    device/tct/yaris_m_gsm/rootdir/root/init.recovery.mt6572.rc:root/init.recovery.mt6572.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.rc:root/init.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.mt6572.rc:root/init.mt6572.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.project.rc:root/init.project.rc \
-    device/tct/yaris_m_gsm/rootdir/root/factory_init.rc:root/factory_init.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.fuse.rc:root/init.fuse.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.modem.rc:root/init.modem.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.xlog.rc:root/init.xlog.rc \
-    device/tct/yaris_m_gsm/rootdir/root/ueventd.mt6572.rc:root/ueventd.mt6572.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.mt6572.usb.rc:root/init.mt6572.usb.rc \
-    device/tct/yaris_m_gsm/rootdir/root/init.protect.rc:root/init.protect.rc \
-    device/tct/yaris_m_gsm/rootdir/root/ueventd.rc:root/ueventd.rc \
-    device/alcatel/yaris/rootdir/root/init.mt6572.usb.rc:root/init.mt6572.usb.rc \
+    device/tct/yaris_m_gsm/rootdir/fstab.mt6572:root/fstab.mt6572 \
+    device/tct/yaris_m_gsm/rootdir/default.prop:root/default.prop \
+    device/tct/yaris_m_gsm/rootdir/init.recovery.mt6572.rc:root/init.recovery.mt6572.rc \
+    device/tct/yaris_m_gsm/rootdir/init.rc:root/init.rc \
+    device/tct/yaris_m_gsm/rootdir/init.mt6572.rc:root/init.mt6572.rc \
+    device/tct/yaris_m_gsm/rootdir/init.project.rc:root/init.project.rc \
+    device/tct/yaris_m_gsm/rootdir/factory_init.rc:root/factory_init.rc \
+    device/tct/yaris_m_gsm/rootdir/init.fuse.rc:root/init.fuse.rc \
+    device/tct/yaris_m_gsm/rootdir/init.modem.rc:root/init.modem.rc \
+    device/tct/yaris_m_gsm/rootdir/init.xlog.rc:root/init.xlog.rc \
+    device/tct/yaris_m_gsm/rootdir/ueventd.mt6572.rc:root/ueventd.mt6572.rc \
+    device/tct/yaris_m_gsm/rootdir/init.mt6572.usb.rc:root/init.mt6572.usb.rc \
+    device/tct/yaris_m_gsm/rootdir/init.protect.rc:root/init.protect.rc \
+    device/tct/yaris_m_gsm/rootdir/ueventd.rc:root/ueventd.rc \
+    device/tct/yaris_m_gsm/rootdir/init.mt6572.usb.rc:root/init.mt6572.usb.rc \
     $(LOCAL_KERNEL):kernel
 
+# Permissions
 PRODUCT_COPY_FILES += \
 	device/tct/yaris_m_gsm/rootdir/configs/android.hardware.microphone.xml:system/etc/permissions/android.hardware.microphone.xml \
 	device/tct/yaris_m_gsm/rootdir/configs/android.hardware.camera.xml:system/etc/permissions/android.hardware.camera.xml \
@@ -69,6 +73,7 @@ PRODUCT_COPY_FILES += \
 	frameworks/native/data/etc/android.hardware.sensor.light.xml:system/etc/permissions/android.hardware.sensor.light.xml \
 	frameworks/native/data/etc/android.hardware.sensor.proximity.xml:system/etc/permissions/android.hardware.sensor.proximity.xml \
 	frameworks/native/data/etc/android.hardware.location.gps.xml:system/etc/permissions/android.hardware.location.gps.xml
+
 
 PRODUCT_COPY_FILES += \
 	$(LOCAL_PATH)/rootdir/configs/media_codecs.xml:system/etc/media_codecs.xml \
@@ -94,16 +99,3 @@ PRODUCT_NAME := full_yaris_m_gsm
 PRODUCT_DEVICE := yaris_m_gsm
 
 $(call inherit-product, frameworks/native/build/phone-xhdpi-1024-dalvik-heap.mk)
-
-ADDITIONAL_DEFAULT_PROPERTIES += ro.secure=0 \
-ro.allow.mock.location=0 \
-persist.mtk.aee.aed=on \
-ro.debuggable=1 \
-ro.adb.secure=0 \
-ro.telephony.ril_class=MediaTekRIL \
-persist.service.acm.enable=0 \
-persist.sys.usb.config=mtp,mass_storage \
-persist.sys.force_highendgfx=true \
-ro.mount.fs=EXT4 \
-ro.persist.partition.support=no
-

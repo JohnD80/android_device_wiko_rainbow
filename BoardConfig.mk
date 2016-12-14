@@ -62,7 +62,7 @@ RECOVERY_VARIANT := twrp
 #RECOVERY_VARIANT := carliv
 
 ifneq ($(RECOVERY_VARIANT),carliv)
-TARGET_RECOVERY_FSTAB := device/tct/yaris_m_gsm/recovery/recovery.fstab
+TARGET_RECOVERY_FSTAB := device/tct/yaris_m_gsm/rootdir/recovery.fstab
 endif
 
 

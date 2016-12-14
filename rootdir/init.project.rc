@@ -1,12 +1,13 @@
 # MTK project .rc configure
-on early-init
-
 
 on post-fs-data
 
 #
 # Connectivity related device nodes & configuration (begin)
 #
+
+#cpt ft53x6 apk update
+chmod 0777 /dev/ft_rw_iic_drv
 
 #/dev/ttyMT2 for Connectivity BT/FM/GPS usage
     chmod 0660 /dev/ttyMT2
@@ -25,31 +26,20 @@ on post-fs-data
     insmod /system/lib/modules/mtk_wmt_detect.ko
 
 # Create char device file for WMT, GPS, BT, FM, WIFI
-    exec /system/xbin/mknod /dev/stpwmt c 190 0
-    exec /system/xbin/mknod /dev/stpgps c 191 0
-    exec /system/xbin/mknod /dev/stpbt  c 192 0
+    mknod /dev/stpwmt c 190 0;
+    mknod /dev/stpgps c 191 0;
+    mknod /dev/stpbt  c 192 0;
 
     chmod 0660 /dev/stpwmt
     chown system system /dev/stpwmt
-     
+    
     chmod 0660 /dev/wmtdetect
- 		chown system system /dev/wmtdetect
+    chown system system /dev/wmtdetect
  		
-    exec /system/xbin/mknod /dev/wmtWifi c 153 0
+    mknod /dev/wmtWifi c 153 0
     chmod 0660 /dev/wmtWifi
     chown system system /dev/wmtWifi
-#Camera
-    chmod 0660 /dev/OV8825AF
-    chown system camera /dev/OV8825AF
 
-    chmod 0660 /dev/OV8826AF
-    chown system camera /dev/OV8826AF
-
-    chmod 0660 /dev/FM50AF
-    chown system camera /dev/FM50AF
-    
-    chmod 0660 /dev/LITEON3H7AF
-    chown system camera /dev/LITEON3H7AF
 # BT
     chmod 0660 /dev/stpbt
     chown bluetooth radio /dev/stpbt
@@ -80,6 +70,20 @@ on post-fs-data
 
 #
 # Connectivity related device nodes & configuration (end)
+#
+
+# Encrypt phone function
+    setprop vold.post_fs_data_done 1
+
+on boot
+    # Refer to http://source.android.com/devices/tech/storage/index.html
+    # It said, "Starting in Android 4.4, multiple external storage devices are surfaced to developers through 
+    #           Context.getExternalFilesDirs(), Context.getExternalCacheDirs(), and Context.getObbDirs().
+    #           External storage devices surfaced through these APIs must be a semi-permanent part of the device (such as an SD card slot in a battery compartment).
+    #           Developers expect data stored in these locations to be available over long periods of time."
+    # Therefore, if the target has the SD card slot in a battery compartment, we need to specify SECONDARY_STORAGE (*** UN-Comment the following command ***)
+    # 
+    # export SECONDARY_STORAGE /storage/sdcard1
 
 #
 # Connectivity related services (Begin)
@@ -90,11 +94,20 @@ service wmtLoader /system/bin/logwrapper /system/bin/wmt_loader
     group root
     class main
     oneshot
-   
+
+
 service conn_launcher /system/bin/logwrapper /system/bin/6620_launcher -p /system/etc/firmware/
     user system
     group system
     class core
+
+service wlanLoader /system/bin/wlan_loader
+    user root
+    group root
+    class main
+    oneshot
+
 #
 # Connectivity related services (End)
 #
+
